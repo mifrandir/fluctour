@@ -1,5 +1,5 @@
 """
-Core itinerary generation logic for gmaps-randomizer.
+Core itinerary generation logic for fluctour.
 """
 
 import random

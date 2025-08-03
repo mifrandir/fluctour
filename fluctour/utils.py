@@ -1,5 +1,5 @@
 """
-Utility functions for gmaps-randomizer.
+Utility functions for fluctour.
 """
 
 import os

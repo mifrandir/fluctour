@@ -1,4 +1,4 @@
-# GMaps Randomizer
+# Fluctour
 
 A Python application that generates random travel itineraries using Google Maps API. Create efficient travel routes with interesting stops between your start and end destinations.
 
@@ -26,7 +26,7 @@ A Python application that generates random travel itineraries using Google Maps 
 
    ```bash
    git clone <repository-url>
-   cd gmaps-randomizer
+   cd fluctour
    ```
 
 2. **Install dependencies:**
@@ -58,7 +58,7 @@ A Python application that generates random travel itineraries using Google Maps 
 Generate a travel itinerary from Amsterdam to Copenhagen:
 
 ```bash
-gmaps-randomizer \
+fluctour \
   --start "Amsterdam" \
   --end "Copenhagen" \
   --start-date "3 aug 2025" \
@@ -98,8 +98,8 @@ gmaps-randomizer \
 ### Python API
 
 ```python
-from gmaps_randomizer.maps_client import MapsClient
-from gmaps_randomizer.itinerary import ItineraryGenerator
+from fluctour.maps_client import MapsClient
+from fluctour.itinerary import ItineraryGenerator
 from datetime import datetime
 
 # Initialize
@@ -155,8 +155,8 @@ Travel Suggestions:
 ### Project Structure
 
 ```
-gmaps-randomizer/
-├── gmaps_randomizer/          # Main package
+fluctour/
+├── fluctour/          # Main package
 │   ├── __init__.py
 │   ├── __main__.py           # CLI entry point
 │   ├── cli.py                # Command line interface
@@ -184,7 +184,7 @@ gmaps-randomizer/
 python -m pytest tests/ -v
 
 # Run with coverage
-python -m pytest tests/ --cov=gmaps_randomizer
+python -m pytest tests/ --cov=fluctour
 
 # Run only unit tests (skip integration tests that require API key)
 python -m pytest tests/test_cli.py tests/test_utils.py -v

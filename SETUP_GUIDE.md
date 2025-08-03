@@ -46,7 +46,7 @@ echo "GOOGLE_MAPS_API_KEY=your_actual_api_key_here" > .env
 ### Option 3: Command Line Flag
 
 ```bash
-gmaps-randomizer --api-key "your_actual_api_key_here" --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
+fluctour --api-key "your_actual_api_key_here" --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
 ```
 
 ## Step 3: Test Your Setup
@@ -54,7 +54,7 @@ gmaps-randomizer --api-key "your_actual_api_key_here" --start "Amsterdam" --end 
 Once you have your API key set up, test it:
 
 ```bash
-gmaps-randomizer --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
+fluctour --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
 ```
 
 ## Important Notes

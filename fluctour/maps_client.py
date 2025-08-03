@@ -1,5 +1,5 @@
 """
-Google Maps API client wrapper for gmaps-randomizer.
+Google Maps API client wrapper for fluctour.
 """
 
 import googlemaps

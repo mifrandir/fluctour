@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Test script to demonstrate gmaps-randomizer functionality.
+Test script to demonstrate fluctour functionality.
 This script shows how the application would work with a valid API key.
 """
 
 import sys
 import os
 from datetime import datetime
-from gmaps_randomizer.cli import validate_dates, parse_locations
-from gmaps_randomizer.utils import format_itinerary_output
+from fluctour.cli import validate_dates, parse_locations
+from fluctour.utils import format_itinerary_output
 
 
 def create_mock_itinerary():
@@ -157,7 +157,7 @@ def test_cli_functions():
 def main():
     """Main test function."""
     print("=" * 60)
-    print("GMAPS-RANDOMIZER TEST DEMONSTRATION")
+    print("FLUCTOUR TEST DEMONSTRATION")
     print("=" * 60)
     print()
 
@@ -184,7 +184,7 @@ def main():
     print("To use with real data, you need a Google Maps API key.")
     print("Set GOOGLE_MAPS_API_KEY environment variable and run:")
     print(
-        'python3 -m gmaps_randomizer --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"'
+        'python3 -m fluctour --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"'
     )
 
 

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Flask web application for gmaps-randomizer.
+Flask web application for fluctour.
 """
 
 import os
 import json
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, send_from_directory
-from gmaps_randomizer.maps_client import MapsClient
-from gmaps_randomizer.itinerary import ItineraryGenerator
+from fluctour.maps_client import MapsClient
+from fluctour.itinerary import ItineraryGenerator
 from dateutil.parser import parse as parse_date
 
 app = Flask(__name__)

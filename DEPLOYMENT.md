@@ -98,10 +98,10 @@ Set in Vercel dashboard:
 
 ```bash
 # Build the image
-docker build -t gmaps-randomizer .
+docker build -t fluctour .
 
 # Run the container
-docker run -p 5000:5000 -e GOOGLE_MAPS_API_KEY="your-api-key" gmaps-randomizer
+docker run -p 5000:5000 -e GOOGLE_MAPS_API_KEY="your-api-key" fluctour
 ```
 
 #### Docker Compose
@@ -141,14 +141,14 @@ sudo apt update
 sudo apt install python3 python3-pip nginx
 
 # Clone repository
-git clone https://github.com/yourusername/gmaps-randomizer.git
-cd gmaps-randomizer
+git clone https://github.com/yourusername/fluctour.git
+cd fluctour
 
 # Install Python dependencies
 pip3 install -r requirements.txt
 
 # Create systemd service
-sudo nano /etc/systemd/system/gmaps-randomizer.service
+sudo nano /etc/systemd/system/fluctour.service
 ```
 
 Service file content:
@@ -160,7 +160,7 @@ After=network.target
 
 [Service]
 User=www-data
-WorkingDirectory=/path/to/gmaps-randomizer
+WorkingDirectory=/path/to/fluctour
 Environment=GOOGLE_MAPS_API_KEY=your-api-key
 ExecStart=/usr/bin/python3 web_app.py
 Restart=always
@@ -171,11 +171,11 @@ WantedBy=multi-user.target
 
 ```bash
 # Enable and start service
-sudo systemctl enable gmaps-randomizer
-sudo systemctl start gmaps-randomizer
+sudo systemctl enable fluctour
+sudo systemctl start fluctour
 
 # Configure nginx reverse proxy
-sudo nano /etc/nginx/sites-available/gmaps-randomizer
+sudo nano /etc/nginx/sites-available/fluctour
 ```
 
 Nginx configuration:
