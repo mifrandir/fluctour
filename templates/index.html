@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GMaps Randomizer - Travel Itinerary Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f2f5;
+      color: #333;
+    }
+    header {
+      background: #4285f4;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:disabled {
+      background: #a0b9f7;
+      cursor: not-allowed;
+    }
+    #result {
+      margin-top: 2rem;
+      white-space: pre-wrap;
+      background: #e8f0fe;
+      padding: 1rem;
+      border-radius: 4px;
+      font-family: monospace;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .error {
+      color: red;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>GMaps Randomizer</h1>
+    <p>Travel Itinerary Generator</p>
+  </header>
+  <main>
+    <form id="itinerary-form">
+      <label for="start">Start Location</label>
+      <input type="text" id="start" name="start" placeholder="e.g. Amsterdam" required />
+
+      <label for="end">End Location</label>
+      <input type="text" id="end" name="end" placeholder="e.g. Copenhagen" required />
+
+      <label for="start_date">Start Date</label>
+      <input type="text" id="start_date" name="start_date" placeholder="e.g. 3 Aug 2025" required />
+
+      <label for="end_date">End Date</label>
+      <input type="text" id="end_date" name="end_date" placeholder="e.g. 10 Aug 2025" required />
+
+      <label for="locations">Locations (optional, comma separated)</label>
+      <input type="text" id="locations" name="locations" placeholder="e.g. Netherlands,Germany,Denmark" />
+
+      <label for="max_stops">Max Stops (optional)</label>
+      <input type="number" id="max_stops" name="max_stops" min="1" max="20" value="5" />
+
+      <label for="min_stay">Min Stay Days (optional)</label>
+      <input type="number" id="min_stay" name="min_stay" min="1" max="10" value="1" />
+
+      <button type="submit">Generate Itinerary</button>
+      <div class="error" id="error-message" style="display:none;"></div>
+    </form>
+
+    <div id="result"></div>
+  </main>
+
+  <script>
+    const form = document.getElementById('itinerary-form');
+    const resultDiv = document.getElementById('result');
+    const errorMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMessage.style.display = 'none';
+      resultDiv.textContent = 'Generating itinerary...';
+
+      const formData = new FormData(form);
+      const data = {
+        start: formData.get('start'),
+        end: formData.get('end'),
+        start_date: formData.get('start_date'),
+        end_date: formData.get('end_date'),
+        locations: formData.get('locations'),
+        max_stops: formData.get('max_stops'),
+        min_stay: formData.get('min_stay')
+      };
+
+      try {
+        const response = await fetch('/api/generate-itinerary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await response.json();
+        if (json.error) {
+          errorMessage.textContent = json.error;
+          errorMessage.style.display = 'block';
+          resultDiv.textContent = '';
+        } else if (json.success) {
+          const itinerary = json.itinerary;
+          let output = 'Travel Itinerary:\\n\\n';
+          itinerary.schedule.forEach(stop => {
+            output += `${stop.date_range} ${stop.name}\\n`;
+          });
+          output += '\\nTravel Suggestions:\\n';
+          itinerary.travel_suggestions.forEach(travel => {
+            output += `From: ${travel.origin} To: ${travel.destination} Distance: ${travel.distance} Duration: ${travel.duration}\\n`;
+          });
+          resultDiv.textContent = output;
+        } else {
+          errorMessage.textContent = 'Unexpected response from server.';
+          errorMessage.style.display = 'block';
+          resultDiv.textContent = '';
+        }
+      } catch (err) {
+        errorMessage.textContent = 'Error generating itinerary: ' + err.message;
+        errorMessage.style.display = 'block';
+        resultDiv.textContent = '';
+      }
+    });
+  </script>
+</body>
+</html>
