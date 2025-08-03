@@ -1,0 +1,2 @@
+[console_scripts]
+gmaps-randomizer = gmaps_randomizer.__main__:main
