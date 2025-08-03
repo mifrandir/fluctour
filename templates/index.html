@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GMaps Randomizer - Travel Itinerary Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .form-container {
+            padding: 40px;
+            border-right: 1px solid #e1e5e9;
+        }
+
+        .map-container {
+            position: relative;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                border-right: none;
+                border-bottom: 1px solid #e1e5e9;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .results {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results h3 {
+            color: #333;
+            margin: 20px 0 10px 0;
+        }
+
+        .results ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .results li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .results a {
+            color: #4facfe;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .results a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        /* Date picker styling */
+        input[type="date"] {
+            position: relative;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>GMaps Randomizer</h1>
+            <p>Travel Itinerary Generator</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="form-container">
+                <form id="itineraryForm">
+                    <div class="form-group">
+                        <label for="start">Start Location</label>
+                        <input type="text" id="start" name="start" placeholder="e.g. Amsterdam" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="end">End Location</label>
+                        <input type="text" id="end" name="end" placeholder="e.g. Copenhagen" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <input type="date" id="start_date" name="start_date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end_date">End Date</label>
+                            <input type="date" id="end_date" name="end_date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="locations">Locations (optional, comma separated)</label>
+                        <input type="text" id="locations" name="locations" placeholder="e.g. Netherlands,Germany,Denmark">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="max_stops">Max Stops (optional)</label>
+                            <input type="number" id="max_stops" name="max_stops" value="5" min="1" max="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="min_stay">Min Stay Days (optional)</label>
+                            <input type="number" id="min_stay" name="min_stay" value="1" min="1" max="7">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">Generate Itinerary</button>
+                </form>
+                
+                <div class="loading" id="loading">
+                    <p>🗺️ Generating your perfect itinerary...</p>
+                </div>
+                
+                <div class="error" id="error"></div>
+                
+                <div class="results" id="results"></div>
+            </div>
+            
+            <div class="map-container">
+                <div id="map">
+                    <div class="map-placeholder">
+                        <h3>🗺️ Interactive Map</h3>
+                        <p>Your itinerary route will appear here after generation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps JavaScript API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap&libraries=geometry"></script>
+
+    <script>
+        let map;
+        let directionsService;
+        let directionsRenderer;
+
+        // Initialize Google Map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 6,
+                center: { lat: 52.5, lng: 5.75 }, // Center on Netherlands/Germany area
+                styles: [
+                    {
+                        featureType: 'water',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#e9e9e9' }, { lightness: 17 }]
+                    },
+                    {
+                        featureType: 'landscape',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#f5f5f5' }, { lightness: 20 }]
+                    }
+                ]
+            });
+
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({
+                draggable: false,
+                polylineOptions: {
+                    strokeColor: '#4facfe',
+                    strokeWeight: 4,
+                    strokeOpacity: 0.8
+                }
+            });
+            directionsRenderer.setMap(map);
+        }
+
+        // Set default dates to example values
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDate = document.getElementById('start_date');
+            const endDate = document.getElementById('end_date');
+            
+            // Set default dates (example: Aug 3-10, 2025)
+            startDate.value = '2025-08-03';
+            endDate.value = '2025-08-10';
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            startDate.min = today;
+            endDate.min = today;
+            
+            // Update end date minimum when start date changes
+            startDate.addEventListener('change', function() {
+                endDate.min = this.value;
+                if (endDate.value && endDate.value < this.value) {
+                    endDate.value = this.value;
+                }
+            });
+        });
+
+        document.getElementById('itineraryForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const results = document.getElementById('results');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Show loading, hide others
+            loading.classList.add('show');
+            error.classList.remove('show');
+            results.classList.remove('show');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Generating...';
+            
+            // Convert date format for API
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Convert YYYY-MM-DD to readable format
+            if (data.start_date) {
+                const startDate = new Date(data.start_date);
+                data.start_date = startDate.toLocaleDateString('en-US', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+            }
+            if (data.end_date) {
+                const endDate = new Date(data.end_date);
+                data.end_date = endDate.toLocaleDateString('en-US', { 
+                    day: 'numeric', 
+                    month: 'short', 
+                    year: 'numeric' 
+                });
+            }
+            
+            try {
+                const response = await fetch('/api/generate-itinerary', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Itinerary';
+                
+                if (result.success) {
+                    displayResults(result.itinerary);
+                    displayRouteOnMap(result.itinerary);
+                    results.classList.add('show');
+                } else {
+                    error.textContent = result.error || 'An error occurred while generating the itinerary.';
+                    error.classList.add('show');
+                }
+            } catch (err) {
+                loading.classList.remove('show');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Generate Itinerary';
+                error.textContent = 'Network error. Please try again.';
+                error.classList.add('show');
+            }
+        });
+        
+        function displayResults(itinerary) {
+            const resultsDiv = document.getElementById('results');
+            
+            let html = `
+                <h3>🗺️ Your Travel Itinerary</h3>
+                <p><strong>Route:</strong> ${itinerary.start_location} → ${itinerary.end_location}</p>
+                <p><strong>Duration:</strong> ${itinerary.total_days} days (${itinerary.start_date} to ${itinerary.end_date})</p>
+                
+                <h3>📅 Daily Schedule</h3>
+                <ul>
+            `;
+            
+            itinerary.daily_schedule.forEach(day => {
+                html += `
+                    <li>
+                        <strong>${day.start_date} - ${day.end_date}:</strong> 
+                        ${day.location.formatted_address}
+                        <br>
+                        <a href="${day.google_maps_url}" target="_blank">📍 View on Google Maps</a>
+                    </li>
+                `;
+            });
+            
+            html += `</ul><h3>🚗 Travel Suggestions</h3><ul>`;
+            
+            itinerary.travel_suggestions.forEach(suggestion => {
+                html += `
+                    <li>
+                        <strong>${suggestion.from} → ${suggestion.to}</strong><br>
+                        Distance: ${suggestion.distance}, Duration: ${suggestion.duration}<br>
+                        <a href="${suggestion.directions_url}" target="_blank">🗺️ Get Directions</a>
+                    </li>
+                `;
+            });
+            
+            html += `</ul>`;
+            
+            resultsDiv.innerHTML = html;
+        }
+
+        function displayRouteOnMap(itinerary) {
+            if (!map || !directionsService || !directionsRenderer) {
+                console.error('Google Maps not initialized');
+                return;
+            }
+
+            const locations = itinerary.locations;
+            if (locations.length < 2) {
+                console.error('Need at least 2 locations for route');
+                return;
+            }
+
+            // Clear previous route
+            directionsRenderer.setDirections({routes: []});
+
+            // Create waypoints (exclude start and end)
+            const waypoints = locations.slice(1, -1).map(location => ({
+                location: new google.maps.LatLng(location.lat, location.lng),
+                stopover: true
+            }));
+
+            const start = new google.maps.LatLng(locations[0].lat, locations[0].lng);
+            const end = new google.maps.LatLng(locations[locations.length - 1].lat, locations[locations.length - 1].lng);
+
+            const request = {
+                origin: start,
+                destination: end,
+                waypoints: waypoints,
+                optimizeWaypoints: false, // Keep our order
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(request, (result, status) => {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                    
+                    // Add custom markers for each stop
+                    locations.forEach((location, index) => {
+                        const marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(location.lat, location.lng),
+                            map: map,
+                            title: location.formatted_address,
+                            label: {
+                                text: (index + 1).toString(),
+                                color: 'white',
+                                fontWeight: 'bold'
+                            },
+                            icon: {
+                                path: google.maps.SymbolPath.CIRCLE,
+                                fillColor: index === 0 ? '#4CAF50' : (index === locations.length - 1 ? '#F44336' : '#4facfe'),
+                                fillOpacity: 1,
+                                strokeColor: 'white',
+                                strokeWeight: 2,
+                                scale: 12
+                            }
+                        });
+
+                        // Add info window
+                        const infoWindow = new google.maps.InfoWindow({
+                            content: `
+                                <div style="padding: 10px;">
+                                    <h4>${location.formatted_address}</h4>
+                                    <p><strong>Stop ${index + 1}</strong></p>
+                                    ${itinerary.daily_schedule[index] ? 
+                                        `<p>${itinerary.daily_schedule[index].start_date} - ${itinerary.daily_schedule[index].end_date}</p>` : 
+                                        ''
+                                    }
+                                </div>
+                            `
+                        });
+
+                        marker.addListener('click', () => {
+                            infoWindow.open(map, marker);
+                        });
+                    });
+                } else {
+                    console.error('Directions request failed due to ' + status);
+                    
+                    // Fallback: just show markers without route
+                    const bounds = new google.maps.LatLngBounds();
+                    locations.forEach((location, index) => {
+                        const marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(location.lat, location.lng),
+                            map: map,
+                            title: location.formatted_address,
+                            label: (index + 1).toString()
+                        });
+                        bounds.extend(marker.getPosition());
+                    });
+                    map.fitBounds(bounds);
+                }
+            });
+        }
+
+        // Fallback if Google Maps fails to load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof google === 'undefined') {
+                    document.getElementById('map').innerHTML = `
+                        <div class="map-placeholder">
+                            <h3>⚠️ Map Unavailable</h3>
+                            <p>Google Maps could not be loaded.<br>Your itinerary will still be generated with links.</p>
+                        </div>
+                    `;
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

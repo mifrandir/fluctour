@@ -14,6 +14,7 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Requires-Python: >=3.7
+License-File: LICENSE
 Requires-Dist: googlemaps>=4.10.0
 Requires-Dist: python-dateutil>=2.8.2
 Requires-Dist: requests>=2.31.0
@@ -21,6 +22,7 @@ Requires-Dist: click>=8.1.0
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
+Dynamic: license-file
 Dynamic: requires-dist
 Dynamic: requires-python
 Dynamic: summary

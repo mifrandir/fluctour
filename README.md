@@ -1,97 +1,61 @@
-# gmaps-randomizer
+# GMaps Randomizer
 
-A Python application to randomly create travel itineraries using Google Maps.
+A Python application that generates random travel itineraries using Google Maps API. Create efficient travel routes with interesting stops between your start and end destinations.
 
 ## Features
 
-- Generate travel itineraries between two locations
-- Specify date ranges for your trip
-- Include constraint locations (countries, cities, or regions)
-- Find interesting stops along your route
-- Get Google Maps links for all locations
-- Receive travel suggestions between stops
+- **Command Line Interface**: Easy-to-use CLI with comprehensive options
+- **Web Interface**: Beautiful, responsive web UI for generating itineraries
+- **Google Maps Integration**: Real location data, distances, and directions
+- **Smart Route Planning**: Finds efficient paths with evenly spaced interesting stops
+- **Flexible Constraints**: Specify countries, continents, or cities to include
+- **Customizable Parameters**: Control max stops, minimum stay duration, and more
+- **Google Maps Links**: Direct links to locations and directions
+- **GitHub CI/CD**: Automated testing and regression detection
 
 ## Installation
 
-1. Clone this repository:
+### Prerequisites
 
-```bash
-git clone <repository-url>
-cd gmaps-randomizer
-```
+- Python 3.9 or higher
+- Google Maps API key
 
-2. Install the package:
+### Setup
 
-```bash
-pip install -e .
-```
+1. **Clone the repository:**
 
-Or install dependencies directly:
+   ```bash
+   git clone <repository-url>
+   cd gmaps-randomizer
+   ```
 
-```bash
-pip install -r requirements.txt
-```
+2. **Install dependencies:**
 
-3. **Important**: Add Python user bin directory to your PATH (for macOS/Linux):
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-```bash
-# For zsh (default on macOS)
-echo 'export PATH="$(python3 -c "import site; print(site.USER_BASE)")/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
+3. **Set up Google Maps API key:**
 
-# For bash
-echo 'export PATH="$(python3 -c "import site; print(site.USER_BASE)")/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-```
+   ```bash
+   # Option 1: Environment variable
+   export GOOGLE_MAPS_API_KEY="your-api-key-here"
 
-This ensures the `gmaps-randomizer` command is available in your terminal.
+   # Option 2: Create .env file
+   cp .env.example .env
+   # Edit .env and add your API key
+   ```
 
-## Setup
-
-### Google Maps API Key
-
-You need a Google Maps API key to use this application. Get one from:
-https://developers.google.com/maps/documentation/javascript/get-api-key
-
-Make sure to enable the following APIs:
-
-- Maps JavaScript API
-- Places API
-- Directions API
-- Geocoding API
-
-### Set your API key
-
-You can provide your API key in several ways:
-
-1. **Command line argument:**
-
-```bash
-gmaps-randomizer --api-key YOUR_API_KEY --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
-```
-
-2. **Environment variable:**
-
-```bash
-export GOOGLE_MAPS_API_KEY=your_api_key_here
-gmaps-randomizer --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
-```
-
-3. **Create a .env file:**
-
-```bash
-echo "GOOGLE_MAPS_API_KEY=your_api_key_here" > .env
-```
+4. **Install the package:**
+   ```bash
+   pip install -e .
+   ```
 
 ## Usage
 
-### Basic Usage
+### Command Line Interface
 
-```bash
-gmaps-randomizer --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
-```
-
-### Advanced Usage
+Generate a travel itinerary from Amsterdam to Copenhagen:
 
 ```bash
 gmaps-randomizer \
@@ -99,76 +63,91 @@ gmaps-randomizer \
   --end "Copenhagen" \
   --start-date "3 aug 2025" \
   --end-date "10 aug 2025" \
-  --locations "Germany,Netherlands" \
-  --max-stops 3 \
-  --min-stay 2
+  --locations "Netherlands,Germany,Denmark"
 ```
 
-### Command Line Options
+#### CLI Options
 
 - `--start`: Starting location (required)
 - `--end`: Ending location (required)
-- `--start-date`: Start date in various formats (required)
-- `--end-date`: End date in various formats (required)
+- `--start-date`: Start date in flexible format (required)
+- `--end-date`: End date in flexible format (required)
 - `--locations`: Comma-separated list of constraint locations (optional)
-- `--api-key`: Google Maps API key (optional if set via environment)
-- `--max-stops`: Maximum number of intermediate stops (default: 5)
-- `--min-stay`: Minimum days to stay at each location (default: 1)
+- `--api-key`: Google Maps API key (optional if set in environment)
+- `--max-stops`: Maximum intermediate stops (default: 5)
+- `--min-stay`: Minimum days per location (default: 1)
 
-### Date Formats
+### Web Interface
 
-The application accepts various date formats:
+1. **Start the web server:**
 
-- "3 aug 2025"
-- "2025-08-03"
-- "August 3, 2025"
-- "03/08/2025"
+   ```bash
+   python web_app.py
+   ```
+
+2. **Open your browser:**
+   Navigate to `http://localhost:5000`
+
+3. **Fill out the form:**
+   - Enter start and end locations
+   - Specify travel dates
+   - Optionally add location constraints
+   - Adjust max stops and minimum stay
+   - Click "Generate Itinerary"
+
+### Python API
+
+```python
+from gmaps_randomizer.maps_client import MapsClient
+from gmaps_randomizer.itinerary import ItineraryGenerator
+from datetime import datetime
+
+# Initialize
+client = MapsClient("your-api-key")
+generator = ItineraryGenerator(client)
+
+# Generate itinerary
+itinerary = generator.generate_itinerary(
+    start_location="Amsterdam",
+    end_location="Copenhagen",
+    start_date=datetime(2025, 8, 3),
+    end_date=datetime(2025, 8, 10),
+    constraint_locations=["Netherlands", "Germany", "Denmark"],
+    max_stops=5,
+    min_stay=1
+)
+
+print(itinerary)
+```
 
 ## Example Output
 
 ```
-============================================================
-TRAVEL ITINERARY
-============================================================
-From: Amsterdam
-To: Copenhagen
-Duration: 2025-08-03 to 2025-08-10 (7 days)
+Travel Itinerary: Amsterdam → Copenhagen
+Duration: 7 days (2025-08-03 to 2025-08-10)
 
-SCHEDULE:
-----------------------------------------
+Daily Schedule:
 Aug 03 - Aug 04: Amsterdam, Netherlands
-  Days: 1
-  Google Maps: https://www.google.com/maps/place/?q=place_id:ChIJ...
+  📍 https://www.google.com/maps/place/?q=place_id:ChIJ...
 
 Aug 04 - Aug 05: Groningen, Netherlands
-  Days: 1
-  Google Maps: https://www.google.com/maps/place/?q=place_id:ChIJ...
+  📍 https://www.google.com/maps/place/?q=place_id:ChIJ...
 
-Aug 05 - Aug 06: Bremerhaven, Germany
-  Days: 1
-  Google Maps: https://www.google.com/maps/place/?q=place_id:ChIJ...
+Aug 05 - Aug 07: Hamburg, Germany
+  📍 https://www.google.com/maps/place/?q=place_id:ChIJ...
 
-Aug 07 - Aug 08: Hamburg, Germany
-  Days: 1
-  Google Maps: https://www.google.com/maps/place/?q=place_id:ChIJ...
+Aug 07 - Aug 10: Copenhagen, Denmark
+  📍 https://www.google.com/maps/place/?q=place_id:ChIJ...
 
-Aug 08 - Aug 10: Copenhagen, Denmark
-  Days: 2
-  Google Maps: https://www.google.com/maps/place/?q=place_id:ChIJ...
+Travel Suggestions:
+🚗 Amsterdam → Groningen: 185 km, 2h 15min
+   https://www.google.com/maps/dir/Amsterdam/Groningen
 
-TRAVEL BETWEEN LOCATIONS:
-----------------------------------------
-From: Amsterdam, Netherlands
-To: Groningen, Netherlands
-Distance: 185 km
-Duration: 2 hours 5 mins
-Directions: https://www.google.com/maps/dir/Amsterdam/Groningen
+🚗 Groningen → Hamburg: 285 km, 3h 5min
+   https://www.google.com/maps/dir/Groningen/Hamburg
 
-...
-
-============================================================
-Have a great trip!
-============================================================
+🚗 Hamburg → Copenhagen: 350 km, 4h 20min
+   https://www.google.com/maps/dir/Hamburg/Copenhagen
 ```
 
 ## Development
@@ -177,69 +156,117 @@ Have a great trip!
 
 ```
 gmaps-randomizer/
-├── gmaps_randomizer/
+├── gmaps_randomizer/          # Main package
 │   ├── __init__.py
-│   ├── __main__.py          # Main entry point
-│   ├── cli.py               # Command line interface
-│   ├── maps_client.py       # Google Maps API wrapper
-│   ├── itinerary.py         # Core itinerary generation
-│   └── utils.py             # Utility functions
-├── requirements.txt
-├── setup.py
-└── README.md
+│   ├── __main__.py           # CLI entry point
+│   ├── cli.py                # Command line interface
+│   ├── maps_client.py        # Google Maps API wrapper
+│   ├── itinerary.py          # Core itinerary generation
+│   └── utils.py              # Utility functions
+├── tests/                    # Test suite
+│   ├── test_cli.py
+│   ├── test_utils.py
+│   └── test_integration.py
+├── templates/                # Web UI templates
+│   └── index.html
+├── .github/workflows/        # CI/CD configuration
+│   └── ci.yml
+├── web_app.py               # Flask web application
+├── requirements.txt         # Dependencies
+├── setup.py                # Package configuration
+└── README.md               # This file
 ```
 
-### Running from Source
+### Running Tests
 
 ```bash
-python -m gmaps_randomizer --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"
+# Run all tests
+python -m pytest tests/ -v
+
+# Run with coverage
+python -m pytest tests/ --cov=gmaps_randomizer
+
+# Run only unit tests (skip integration tests that require API key)
+python -m pytest tests/test_cli.py tests/test_utils.py -v
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-1. **API Key Issues:**
-
-   - Make sure your API key is valid
-   - Ensure required APIs are enabled
-   - Check API quotas and billing
-
-2. **Location Not Found:**
-
-   - Try more specific location names
-   - Use full city names with country
-   - Check spelling
-
-3. **No Route Found:**
-   - Ensure locations are accessible by car
-   - Try different constraint locations
-   - Reduce max-stops parameter
-
-### Error Messages
-
-- `Google Maps API key is required`: Set your API key via environment variable or command line
-- `Could not find location`: The location string couldn't be geocoded
-- `Trip duration is less than minimum stay`: Increase trip duration or reduce min-stay
-
-## License
-
-MIT License - see LICENSE file for details.
-
-## Contributing
+### Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+4. Add tests for new functionality
+5. Run the test suite
+6. Submit a pull request
 
-## API Costs
+## API Requirements
 
-This application uses several Google Maps APIs which may incur costs:
+This application requires a Google Maps API key with the following APIs enabled:
 
-- Geocoding API: ~$5 per 1000 requests
-- Places API: ~$17 per 1000 requests
-- Directions API: ~$5 per 1000 requests
+- **Geocoding API**: For converting location names to coordinates
+- **Distance Matrix API**: For calculating distances and travel times
+- **Directions API**: For route planning and optimization
+- **Places API**: For finding interesting stops along routes
 
-A typical itinerary generation uses 10-20 API calls, costing approximately $0.10-0.50 per itinerary.
+### Getting an API Key
+
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select an existing one
+3. Enable the required APIs listed above
+4. Create credentials (API key)
+5. Optionally restrict the API key to specific APIs and domains
+
+## Deployment
+
+### GitHub Pages (Web UI)
+
+The web interface can be easily deployed to GitHub Pages:
+
+1. Push your code to GitHub
+2. Enable GitHub Pages in repository settings
+3. Set up environment variables for the API key
+4. The CI/CD pipeline will automatically deploy updates
+
+### Heroku
+
+```bash
+# Install Heroku CLI and login
+heroku create your-app-name
+heroku config:set GOOGLE_MAPS_API_KEY="your-api-key"
+git push heroku main
+```
+
+### Docker
+
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "web_app.py"]
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Google Maps API for location data and routing
+- Flask for the web framework
+- Click for the command line interface
+- All contributors and testers
+
+## Support
+
+If you encounter any issues or have questions:
+
+1. Check the [Issues](../../issues) page
+2. Review the [Setup Guide](SETUP_GUIDE.md)
+3. Create a new issue with detailed information
+
+---
+
+**Happy travels! 🗺️✈️**
