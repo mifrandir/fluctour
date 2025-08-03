@@ -22,7 +22,8 @@ app.config["SECRET_KEY"] = os.environ.get(
 @app.route("/")
 def index():
     """Main page with the itinerary form."""
-    return render_template("index.html")
+    api_key = os.getenv("GOOGLE_MAPS_API_KEY", "")
+    return render_template("index.html", google_maps_api_key=api_key)
 
 
 @app.route("/api/generate-itinerary", methods=["POST"])
