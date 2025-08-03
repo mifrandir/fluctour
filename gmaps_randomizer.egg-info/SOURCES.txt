@@ -1,3 +1,4 @@
+LICENSE
 README.md
 setup.py
 gmaps_randomizer/__init__.py
@@ -12,3 +13,7 @@ gmaps_randomizer.egg-info/dependency_links.txt
 gmaps_randomizer.egg-info/entry_points.txt
 gmaps_randomizer.egg-info/requires.txt
 gmaps_randomizer.egg-info/top_level.txt
+tests/__init__.py
+tests/test_cli.py
+tests/test_integration.py
+tests/test_utils.py
