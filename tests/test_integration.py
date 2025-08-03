@@ -1,8 +1,8 @@
 import pytest
 import os
 from datetime import datetime
-from gmaps_randomizer.maps_client import MapsClient
-from gmaps_randomizer.itinerary import ItineraryGenerator
+from fluctour.maps_client import MapsClient
+from fluctour.itinerary import ItineraryGenerator
 
 
 class TestIntegration:

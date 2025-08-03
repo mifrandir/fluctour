@@ -1,6 +1,6 @@
 import pytest
 from datetime import datetime
-from gmaps_randomizer.cli import validate_dates, parse_locations
+from fluctour.cli import validate_dates, parse_locations
 
 
 def test_parse_locations():

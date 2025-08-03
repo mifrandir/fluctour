@@ -1,5 +1,5 @@
 """
-Command line interface for gmaps-randomizer.
+Command line interface for fluctour.
 """
 
 import argparse
@@ -12,7 +12,7 @@ def parse_arguments():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
         description="Generate random travel itineraries using Google Maps",
-        prog="gmaps-randomizer",
+        prog="fluctour",
     )
 
     parser.add_argument(

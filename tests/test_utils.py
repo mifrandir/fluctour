@@ -1,5 +1,5 @@
 import pytest
-from gmaps_randomizer.utils import (
+from fluctour.utils import (
     get_api_key,
     format_itinerary_output,
     validate_itinerary_params,

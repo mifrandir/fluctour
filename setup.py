@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="gmaps-randomizer",
+    name="fluctour",
     version="0.1.0",
     description="A Python application to randomly create travel itineraries using Google Maps",
     author="Your Name",
@@ -15,7 +15,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "gmaps-randomizer=gmaps_randomizer.__main__:main",
+            "fluctour=fluctour.__main__:main",
         ],
     },
     python_requires=">=3.7",

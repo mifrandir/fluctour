@@ -1,5 +1,5 @@
 """
-Main entry point for gmaps-randomizer CLI application.
+Main entry point for fluctour CLI application.
 """
 
 import sys

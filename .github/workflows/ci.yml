@@ -37,13 +37,13 @@ jobs:
       - name: Test with pytest (without API key)
         run: |
           # Run tests that don't require API key
-          pytest tests/ -v --cov=gmaps_randomizer --cov-report=xml
+          pytest tests/ -v --cov=fluctour --cov-report=xml
         env:
           PYTHONPATH: .
 
       - name: Test CLI help and version
         run: |
-          python -m gmaps_randomizer --help
+          python -m fluctour --help
 
       - name: Test web app startup (without API key)
         run: |

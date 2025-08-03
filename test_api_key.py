@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
 Simple script to test if your Google Maps API key is working correctly.
-Run this before using the full gmaps-randomizer application.
+Run this before using the full fluctour application.
 """
 
 import os
 import sys
-from gmaps_randomizer.maps_client import MapsClient
+from fluctour.maps_client import MapsClient
 
 
 def test_api_key():
@@ -75,10 +75,10 @@ if __name__ == "__main__":
     success = test_api_key()
 
     if success:
-        print("\n✅ API key test passed! You can now use gmaps-randomizer.")
+        print("\n✅ API key test passed! You can now use fluctour.")
         print("\nTry running:")
         print(
-            'gmaps-randomizer --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"'
+            'fluctour --start "Amsterdam" --end "Copenhagen" --start-date "3 aug 2025" --end-date "10 aug 2025"'
         )
     else:
         print(
