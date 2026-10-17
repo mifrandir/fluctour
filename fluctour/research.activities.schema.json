@@ -1,0 +1,386 @@
+{
+  "type": "object",
+  "properties": {
+    "summary": {
+      "type": "string"
+    },
+    "options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "departure": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "destination_arrival": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "return_departure": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "return_arrival": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": "string"
+          },
+          "total_cost": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "cost_complete": {
+            "type": "boolean"
+          },
+          "cost_breakdown": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "usable_hours": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "overnight_flight": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "policy_status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "unknown"
+            ]
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "tradeoffs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "price",
+                    "availability",
+                    "entry",
+                    "policy",
+                    "schedule",
+                    "destination"
+                  ]
+                },
+                "url": {
+                  "type": "string"
+                },
+                "checked_at": {
+                  "type": "string"
+                },
+                "finding": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string",
+                  "enum": [
+                    "outbound",
+                    "return",
+                    "accommodation",
+                    "trip"
+                  ]
+                },
+                "source_type": {
+                  "type": "string",
+                  "enum": [
+                    "public_url",
+                    "profile_policy"
+                  ]
+                },
+                "policy_digest": {
+                  "type": "string"
+                },
+                "policy_excerpt": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "url",
+                "checked_at",
+                "finding",
+                "scope",
+                "source_type",
+                "policy_digest",
+                "policy_excerpt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "unresolved": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "legs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "origin": {
+                  "type": "string"
+                },
+                "destination": {
+                  "type": "string"
+                },
+                "departure": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "arrival": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "carrier": {
+                  "type": "string"
+                },
+                "cabin": {
+                  "type": "string"
+                },
+                "paid_by": {
+                  "type": "string",
+                  "enum": [
+                    "personal",
+                    "company",
+                    "unknown"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "origin",
+                "destination",
+                "departure",
+                "arrival",
+                "carrier",
+                "cabin",
+                "paid_by"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "destination",
+          "departure",
+          "destination_arrival",
+          "return_departure",
+          "return_arrival",
+          "currency",
+          "total_cost",
+          "cost_complete",
+          "cost_breakdown",
+          "usable_hours",
+          "overnight_flight",
+          "policy_status",
+          "rationale",
+          "tradeoffs",
+          "evidence",
+          "unresolved",
+          "legs"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "remaining_work": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "activity_plans": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "option_id": {
+            "type": "string"
+          },
+          "dates": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "days": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "time": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "detail": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "time",
+                      "title",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "date",
+                "title",
+                "items"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "flights": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "route": {
+                  "type": "string"
+                },
+                "flight": {
+                  "type": "string"
+                },
+                "time": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "payer": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "date",
+                "route",
+                "flight",
+                "time",
+                "status",
+                "payer"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "route_links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "option_id",
+          "dates",
+          "why",
+          "summary",
+          "days",
+          "flights",
+          "route_links"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "summary",
+    "options",
+    "coverage",
+    "remaining_work",
+    "activity_plans"
+  ],
+  "additionalProperties": false
+}

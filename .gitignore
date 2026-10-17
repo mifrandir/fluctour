@@ -205,3 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Private travel state, policy material, Codex events and local environment.
+.fluctour/
+.env
+.env.*
+!.env.example
+.agents/
+.aws/
+.codex/
